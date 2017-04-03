@@ -7,10 +7,10 @@ Implementar en lenguaje Assembler el juego de la vida, el automata celular, ejec
 
 
 ## REQUISITOS DE APROBACIÓN 
-•	Entregar en la fecha indicada por la cátedra el código fuente y los archivos ejecutables del programa (en un medio digital).
-•	Realizar una carpeta de sistema con el pseudocódigo y o diagramas del programa.
-•	Sobrepasar el testeo realizado por la cátedra.
-•	Aprobar un coloquio referido al desarrollo del programa.
+* Entregar en la fecha indicada por la cátedra el código fuente y los archivos ejecutables del programa (en un medio digital).
+* Realizar una carpeta de sistema con el pseudocódigo y o diagramas del programa.
+* Sobrepasar el testeo realizado por la cátedra.
+* Aprobar un coloquio referido al desarrollo del programa.
 
 
 ## DESCRIPCION DEL FUNCIONAMIENTO
