@@ -20,3 +20,8 @@ El mouse podrá dibujar o borrar puntos. El calculo de la generación siguiente 
 Informacion del Juego de la vida
 
 https://es.wikipedia.org/wiki/Juego_de_la_vida
+
+
+--------------------
+### Ejemplo de uso de SDL desde asm
+https://drive.google.com/drive/folders/0B8Ux34-slH6mamwxVmEtTFczR2M
