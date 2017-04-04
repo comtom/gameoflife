@@ -88,8 +88,8 @@ section ".idata" import data readable writeable
     user32,"user32.dll",\
     sdl,"sdl.dll",\
 
-    include "include\kernel32.inc"
-    include "include\user32.inc"
+    include "include\api\kernel32.inc"
+    include "include\api\user32.inc"
     include "SDLA.inc"
 
     import sdl_image,\
