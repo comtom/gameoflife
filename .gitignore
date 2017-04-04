@@ -1,0 +1,12 @@
+
+*.exe
+*.dll
+*.obj
+*.bin
+*.fas
+*.ini
+
+!FASM.EXE
+!FASMW.EXE
+!FASM.OBJ
+!FASM.DLL
