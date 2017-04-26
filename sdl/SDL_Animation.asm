@@ -1,7 +1,3 @@
-
-    ; by Picnic
-
-
     format PE GUI 4.0
     entry start
 
@@ -99,57 +95,57 @@ start:
     ; While the user hasn't quit
     .while ( dword [quit] = FALSE )
 
-        ; Start the frame timer
-        stdcall timer.start
+	; Start the frame timer
+	stdcall timer.start
 
-        ; While there's events to handle
-        cinvoke SDL_PollEvent, event
-        .if ( eax )
+	; While there's events to handle
+	cinvoke SDL_PollEvent, event
+	.if ( eax )
 
-            ; Handle events for the hero
-            stdcall hero.events
+	    ; Handle events for the hero
+	    stdcall hero.events
 
-            ; If the user has Xed out the window
-            .if ( byte [event.type] = SDL_QUIT )
+	    ; If the user has Xed out the window
+	    .if ( byte [event.type] = SDL_QUIT )
 
-                ; Quit the program
-                mov dword [quit], TRUE
+		; Quit the program
+		mov dword [quit], TRUE
 
-            .endif
+	    .endif
 
-        .endif
+	.endif
 
-        ; Blit surfaces on the screen
-        stdcall apply_surface, dword [sky.x], dword [sky.y], dword [sky], dword [screen], NULL
-        stdcall apply_surface, dword [background.x], dword [background.y], dword [background], dword [screen], NULL
-        stdcall apply_surface, dword [stage.x], dword [stage.y], dword [stage], dword [screen], NULL
+	; Blit surfaces on the screen
+	stdcall apply_surface, dword [sky.x], dword [sky.y], dword [sky], dword [screen], NULL
+	stdcall apply_surface, dword [background.x], dword [background.y], dword [background], dword [screen], NULL
+	stdcall apply_surface, dword [stage.x], dword [stage.y], dword [stage], dword [screen], NULL
 
-        ; Move the hero
-        stdcall hero.move
+	; Move the hero
+	stdcall hero.move
 
-        ; Show hero on the screen
-        stdcall hero.show
+	; Show hero on the screen
+	stdcall hero.show
 
-        ; Update the screen
-        cinvoke SDL_Flip, dword [screen]
-        cmp eax, -1
-        je .exit
+	; Update the screen
+	cinvoke SDL_Flip, dword [screen]
+	cmp eax, -1
+	je .exit
 
-        ; Cap the frame rate
-        stdcall fps.get_ticks
-        .if ( signed eax < 1000 / FRAMES_PER_SECOND )
-            mov ecx, 1000 / FRAMES_PER_SECOND
-            sub ecx, eax
-            cinvoke SDL_Delay, ecx
-        .endif
+	; Cap the frame rate
+	stdcall fps.get_ticks
+	.if ( signed eax < 1000 / FRAMES_PER_SECOND )
+	    mov ecx, 1000 / FRAMES_PER_SECOND
+	    sub ecx, eax
+	    cinvoke SDL_Delay, ecx
+	.endif
 
     .endw
 
     ; Clean up
     stdcall clean_up
 
-        .exit:
-    invoke ExitProcess, 0
+	.exit:
+    ;invoke ExitProcess, 0
     ret
 
 ;--------------------------------------------------------------------------------------------------
@@ -170,9 +166,9 @@ proc load_files
     stdcall load_image, "sky.png"
     mov dword [sky], eax
 
-    .if ( dword [hero] = -1 | dword [background] = -1 | dword [stage] = -1 |  dword [sky] = -1  )
-        mov eax, -1
-        ret
+    .if ( dword [hero] = -1 | dword [background] = -1 | dword [stage] = -1 |  dword [sky] = -1	)
+	mov eax, -1
+	ret
     .endif
 
     mov eax, TRUE
@@ -194,26 +190,26 @@ proc hero.events
     ; If a key was pressed
     .if ( byte [event.type] = SDL_KEYDOWN )
 
-        ; Set the velocity
-        .if ( dword [event.key.keysym.sym] = SDLK_RIGHT )
-            add dword [velocity], HERO_WIDTH/8
+	; Set the velocity
+	.if ( dword [event.key.keysym.sym] = SDLK_RIGHT )
+	    add dword [velocity], HERO_WIDTH/8
 
-        .elseif ( dword [event.key.keysym.sym] = SDLK_LEFT )
-            sub dword [velocity], HERO_WIDTH/8
+	.elseif ( dword [event.key.keysym.sym] = SDLK_LEFT )
+	    sub dword [velocity], HERO_WIDTH/8
 
-        .endif
+	.endif
 
     ; If a key was released
     .elseif ( byte [event.type] = SDL_KEYUP )
 
-        ; Set the velocity
-        .if ( dword [event.key.keysym.sym] = SDLK_RIGHT )
-            sub dword [velocity], HERO_WIDTH/8
+	; Set the velocity
+	.if ( dword [event.key.keysym.sym] = SDLK_RIGHT )
+	    sub dword [velocity], HERO_WIDTH/8
 
-        .elseif ( dword [event.key.keysym.sym] = SDLK_LEFT )
-            add dword [velocity], HERO_WIDTH/8
+	.elseif ( dword [event.key.keysym.sym] = SDLK_LEFT )
+	    add dword [velocity], HERO_WIDTH/8
 
-        .endif
+	.endif
 
     .endif
 
@@ -246,7 +242,7 @@ proc hero.move
     ; Keep hero in bounds
     .if ( ( signed dword [hero.x] < 0 ) | ( signed dword [hero.x] > ( SCREEN_WIDTH-HERO_WIDTH ) ) )
 
-        sub dword [hero.x], eax
+	sub dword [hero.x], eax
 
     .endif
 
@@ -260,84 +256,84 @@ proc hero.show
     ; If hero is moving left
     .if ( signed dword [velocity] < 0 )
 
-        ; Set the animation to left
-        mov dword [status], HERO_LEFT
+	; Set the animation to left
+	mov dword [status], HERO_LEFT
 
-        ; Move to the next frame in the animation
-        add dword [frame], 1
+	; Move to the next frame in the animation
+	add dword [frame], 1
 
-        ; Move the stage
-        add dword [stage.x], 4
-        .if ( signed dword [stage.x] > 0 )
-            mov dword [stage.x], -SCREEN_WIDTH
-        .endif
+	; Move the stage
+	add dword [stage.x], 4
+	.if ( signed dword [stage.x] > 0 )
+	    mov dword [stage.x], -SCREEN_WIDTH
+	.endif
 
-        ; Move the background
-        add dword [background.x], 2
-        .if ( signed dword [background.x] > 0 )
-            mov dword [background.x], -SCREEN_WIDTH
-        .endif
+	; Move the background
+	add dword [background.x], 2
+	.if ( signed dword [background.x] > 0 )
+	    mov dword [background.x], -SCREEN_WIDTH
+	.endif
 
-        ; Move the sky
-        add dword [sky.x], 1
-        .if ( signed dword [sky.x] > 0 )
-            mov dword [sky.x], -SCREEN_WIDTH
-        .endif
+	; Move the sky
+	add dword [sky.x], 1
+	.if ( signed dword [sky.x] > 0 )
+	    mov dword [sky.x], -SCREEN_WIDTH
+	.endif
 
     ; If hero is moving right
     .elseif ( signed dword [velocity] > 0 )
 
-        ; Set the animation to right
-        mov dword [status], HERO_RIGHT
+	; Set the animation to right
+	mov dword [status], HERO_RIGHT
 
-        ; Move to the next frame in the animation
-        add dword [frame], 1
+	; Move to the next frame in the animation
+	add dword [frame], 1
 
-        ; Move the stage
-        sub dword [stage.x], 4
-        .if ( signed dword [stage.x] <= -SCREEN_WIDTH )
-            mov dword [stage.x], 0
-        .endif
+	; Move the stage
+	sub dword [stage.x], 4
+	.if ( signed dword [stage.x] <= -SCREEN_WIDTH )
+	    mov dword [stage.x], 0
+	.endif
 
-        ; Move the background
-        sub dword [background.x], 2
-        .if ( signed dword [background.x] <= -SCREEN_WIDTH )
-            mov dword [background.x], 0
-        .endif
+	; Move the background
+	sub dword [background.x], 2
+	.if ( signed dword [background.x] <= -SCREEN_WIDTH )
+	    mov dword [background.x], 0
+	.endif
 
-        ; Move the sky
-        sub dword [sky.x], 1
-        .if ( signed dword [sky.x] <= -SCREEN_WIDTH )
-            mov dword [sky.x], 0
-        .endif
+	; Move the sky
+	sub dword [sky.x], 1
+	.if ( signed dword [sky.x] <= -SCREEN_WIDTH )
+	    mov dword [sky.x], 0
+	.endif
 
     ; If hero standing
     .else
 
-        ; Restart the animation
-        mov dword [frame], 1
+	; Restart the animation
+	mov dword [frame], 1
 
     .endif
 
     ; Loop the animation
     .if ( dword [frame] >= 3 )
 
-        mov dword [frame], 0
+	mov dword [frame], 0
 
     .endif
 
     ; Show the hero
     .if ( dword [status] = HERO_RIGHT )
 
-        imul eax, dword [frame], sizeof.SDL_Rect
-        add eax, heroRight
-        stdcall apply_surface, dword [hero.x], SCREEN_HEIGHT - HERO_HEIGHT - 10, dword [hero], dword [screen], eax
+	imul eax, dword [frame], sizeof.SDL_Rect
+	add eax, heroRight
+	stdcall apply_surface, dword [hero.x], SCREEN_HEIGHT - HERO_HEIGHT - 10, dword [hero], dword [screen], eax
 
     .elseif ( dword [status] = HERO_LEFT )
 
-        imul eax, dword [frame], sizeof.SDL_Rect
-        add eax, heroLeft
-        stdcall apply_surface, dword [hero.x], SCREEN_HEIGHT - HERO_HEIGHT - 10, dword [hero], dword [screen], eax
+	imul eax, dword [frame], sizeof.SDL_Rect
+	add eax, heroLeft
+	stdcall apply_surface, dword [hero.x], SCREEN_HEIGHT - HERO_HEIGHT - 10, dword [hero], dword [screen], eax
 
     .endif
 
@@ -380,10 +376,10 @@ proc fps.get_ticks usesdef
     ; If the timer is running
     .if ( dword [started] = TRUE )
 
-        ; Return the current time minus the start time
-        cinvoke SDL_GetTicks
-        sub eax, dword [startTicks]
-        ret
+	; Return the current time minus the start time
+	cinvoke SDL_GetTicks
+	sub eax, dword [startTicks]
+	ret
 
     .endif
 
@@ -408,19 +404,19 @@ proc init usesdef
     ; Initialize all SDL subsystems
     cinvoke SDL_Init, SDL_INIT_EVERYTHING
     .if ( eax = -1 )
-        ret
+	ret
     .endif
 
     ; Set up the screen
     cinvoke SDL_SetVideoMode, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE
     mov dword [screen], eax
     .if ( eax = NULL )
-        mov eax, -1
-        ret
+	mov eax, -1
+	ret
     .endif
 
     ; Set the window caption
-    cinvoke SDL_WM_SetCaption, "SDL_Animation", NULL
+    cinvoke SDL_WM_SetCaption, "Arquitectura I - TP 2016", NULL
 
     mov eax, TRUE
 
@@ -479,24 +475,24 @@ proc load_image usesdef,\
     ; If the image loaded
     .if ( eax <> NULL )
 
-        ; Create an optimized surface
-        cinvoke SDL_DisplayFormat, dword [loadedImage]
-        mov dword [optimizedImage], eax
+	; Create an optimized surface
+	cinvoke SDL_DisplayFormat, dword [loadedImage]
+	mov dword [optimizedImage], eax
 
-        ; Free the old surface
-        cinvoke SDL_FreeSurface, dword [loadedImage]
+	; Free the old surface
+	cinvoke SDL_FreeSurface, dword [loadedImage]
 
-        ; If the surface was optimized
-        .if ( dword [optimizedImage] <> NULL )
+	; If the surface was optimized
+	.if ( dword [optimizedImage] <> NULL )
 
-            ; Color key surface
-            mov eax, dword [optimizedImage]
-            mov eax, dword [eax+SDL_Surface.format]
-            cinvoke SDL_MapRGB, eax, 0, 0xFF, 0xFF
-            mov dword [colorKey], eax
-            cinvoke SDL_SetColorKey, dword [optimizedImage], SDL_SRCCOLORKEY, dword [colorKey]
+	    ; Color key surface
+	    mov eax, dword [optimizedImage]
+	    mov eax, dword [eax+SDL_Surface.format]
+	    cinvoke SDL_MapRGB, eax, 0, 0xFF, 0xFF
+	    mov dword [colorKey], eax
+	    cinvoke SDL_SetColorKey, dword [optimizedImage], SDL_SRCCOLORKEY, dword [colorKey]
 
-        .endif
+	.endif
 
     .endif
 
@@ -510,16 +506,12 @@ endp
 
 section ".idata" import data readable writeable
 
-
     library\
     user32,"user32.dll",\
     sdl,"sdl.dll",\
     sdl_image,"sdl_image.dll"
 
-    ; libreria importada de https://github.com/Konctantin/FASM/blob/master/INCLUDE/API/KERNEL32.INC
-    ; verificar directorio antes de ensamblar
     include "..\include\api\kernel32.inc"
-    ; https://github.com/Konctantin/FASM/blob/master/INCLUDE/API/USER32.INC
     include "..\include\api\user32.inc"
     include "SDLA.inc"
 
