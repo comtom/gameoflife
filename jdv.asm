@@ -29,12 +29,15 @@ section ".data" data readable writeable
     event SDL_Event
     bcell SDL_Surface
 
-    screen dd 0
+    screen SDL_Surface
+
+    ;screen dd 0
     breaker dd 0
-    paused dd 1
-    quit dd FALSE
+    paused  dd 1
+    quit    dd FALSE
 
     bgcolor dd 0
+    color   dd 0
 
 section ".code" code readable executable
 start:
@@ -70,6 +73,7 @@ start:
 	; While there's events to handle
 	cinvoke SDL_PollEvent, event
 	.if ( eax )
+	    stdcall procesar_eventos
 
 	    ; If the user has Xed out the window
 	    .if ( byte [event.type] = SDL_QUIT )
@@ -104,9 +108,51 @@ start:
 ; -----------------------------------
 ; procedimientos
 
+proc procesar_eventos
+     ; realiza acciones ante ciertos eventos de teclado/mouse
+     ; dibujar o borrar pixel cuando se hace clic
+     ; aleatorizar tablero
+     ; iniciar/pausar/reanudar la simulacion
+    ; If a key was pressed
+
+    ; evento del teclado
+    .if ( byte [event.type] = SDL_KEYDOWN )
+
+	; Set the velocity
+	.if ( dword [event.key.keysym.sym] = SDLK_KP_ENTER )
+	    ; pausar/reanudar
+	    ;paused = !paused;
+
+	.elseif ( dword [event.key.keysym.sym] = SDLK_SPACE )
+	    ;cinvoke SDL_FillRect, dword [screen], &(screen->clip_rect), dword [bgcolor]
+	    stdcall randomize_board
+
+	.elseif ( dword [event.key.keysym.sym] = SDLK_ESCAPE )
+	    ; sale de la aplicacion
+	    mov [quit], TRUE
+	.elseif ( dword [event.key.keysym.sym] = SDLK_LSHIFT )
+	    ; limpia la pantalla
+	    stdcall clear_board, screen, bgcolor
+
+	.endif
+
+    ; evento del mouse
+    .elseif ( byte [event.type] = SDL_MOUSEBUTTONDOWN )
+
+	.if ( dword [event.key.keysym.sym] = SDLK_LSHIFT )
+
+
+	.endif
+
+    .endif
+
+     ret
+endp
+
 proc randomize_board
      ; limpia la cuadricula y enciende aleatoriamente algunas celdas
-      ret
+
+     ret
 endp
 
 
@@ -117,35 +163,39 @@ proc initialize_grid, screen
 endp
 
 
-; proc blit_board,\
-;     SDL_Surface* bcell, SDL_Surface* screen
-;     ; refresca la cuadricula del tablero
+proc blit_board, bcell, screen
+     ; refresca la cuadricula del tablero
 
-; endp
-
-
-; proc num_neighbours,\
-;     int x, int y
-;     ; calcula el nro de vecinos de una celda
-; endp
+     ret
+endp
 
 
-; proc update_board
-; endp
+proc num_neighbours, x, y
+     ; calcula el nro de vecinos de una celda
+
+     ret
+endp
 
 
-; proc clear_board,\
-;     SDL_Surface* screen, Uint32 color
-;     ; borra toda la cuadricula
-
-; endp
+proc update_board
+     ret
+endp
 
 
-; proc clear_cell,\
-;     SDL_Surface* screen, int x, int y, Uint32 color
-;     ; apaga una celda (la pinta de blanco)
+proc clear_board, screen, color
+     ; borra las dos matrices (recorre la matriz y pone todas sus celdas en OFF)
+     ; devuelve pantalla en blanco
 
-; endp
+     cinvoke SDL_FillRect,  [screen], [screen], [color]
+     ret
+endp
+
+
+proc clear_cell, screen, x, y, color
+     ; apaga una celda (la pinta de blanco)
+
+     ret
+endp
 
 
 proc initialize_cells_array
