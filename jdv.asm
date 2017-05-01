@@ -113,7 +113,6 @@ proc procesar_eventos
      ; dibujar o borrar pixel cuando se hace clic
      ; aleatorizar tablero
      ; iniciar/pausar/reanudar la simulacion
-    ; If a key was pressed
 
     ; evento del teclado
     .if ( byte [event.type] = SDL_KEYDOWN )
@@ -124,7 +123,7 @@ proc procesar_eventos
 	    ;paused = !paused;
 
 	.elseif ( dword [event.key.keysym.sym] = SDLK_SPACE )
-	    ;cinvoke SDL_FillRect, dword [screen], &(screen->clip_rect), dword [bgcolor]
+	    cinvoke SDL_FillRect, dword [screen], dword [screen], dword [color]
 	    stdcall randomize_board
 
 	.elseif ( dword [event.key.keysym.sym] = SDLK_ESCAPE )
@@ -139,10 +138,10 @@ proc procesar_eventos
     ; evento del mouse
     .elseif ( byte [event.type] = SDL_MOUSEBUTTONDOWN )
 
-	.if ( dword [event.key.keysym.sym] = SDLK_LSHIFT )
-
+	.if ( dword [event.key.keysym.sym] = SDL_BUTTON_LEFT )
 
 	.endif
+
 
     .endif
 
