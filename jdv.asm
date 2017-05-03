@@ -6,7 +6,7 @@
 section ".data" data readable writeable
     include "SDLD.inc"
 
-    ; tamaÃ±o cuadricula
+    ; tamaño cuadricula
     ROWS = 60
     COLS = 60
 
@@ -51,7 +51,7 @@ start:
     cinvoke SDL_WM_SetCaption, "Juego de la vida - Arquitectura I (2016)", NULL
 
     ;cinvoke SDL_MapRGB screen->format, 0xFF, 0xFF, 0xFF
-    cinvoke SDL_MapRGB, eax, 0xFF, 0xFF, 0xFF
+    cinvoke SDL_MapRGB, dword [screen], 0xFF, 0xFF, 0xFF
     mov dword [bgcolor], eax
 
     ;initialize_cells_array();
@@ -109,10 +109,10 @@ start:
 ; procedimientos
 
 proc procesar_eventos
-     ; realiza acciones ante ciertos eventos de teclado/mouse
-     ; dibujar o borrar pixel cuando se hace clic
-     ; aleatorizar tablero
-     ; iniciar/pausar/reanudar la simulacion
+    ; realiza acciones ante ciertos eventos de teclado/mouse
+    ; dibujar o borrar pixel cuando se hace clic
+    ; aleatorizar tablero
+    ; iniciar/pausar/reanudar la simulacion
 
     ; evento del teclado
     .if ( byte [event.type] = SDL_KEYDOWN )
@@ -145,62 +145,114 @@ proc procesar_eventos
 
     .endif
 
-     ret
+    ret
 endp
 
 proc randomize_board
-     ; limpia la cuadricula y enciende aleatoriamente algunas celdas
+    ; limpia la cuadricula y enciende aleatoriamente algunas celdas
 
-     ret
+    ret
 endp
 
 
 proc initialize_grid, screen
-     ; inicializa la cuadricula
+    ; inicializa la cuadricula
 
-     ret
+    cinvoke SDL_CreateRGBSurface, SDL_SWSURFACE, 1, SCR_HEIGHT, BLACK
+    mov dword edx, eax
+
+    cinvoke SDL_CreateRGBSurface, SDL_SWSURFACE, SCR_WIDTH, 1, BLACK
+    mov dword edx, eax
+
+    ; SDL_Rect pos_x;
+    ; SDL_Rect pos_y;
+    ; pos_x.y = pos_y.x = 0;
+    ; for (int i = 0; i < scr_width / (cell_width); i++) {
+    ;	  pos_x.x = cell_width + cell_width * i;
+    ;	  SDL_BlitSurface(linex, &(linex->clip_rect), screen, &pos_x);
+    ; }
+
+    ; mov      DWORD PTR _i$2[ebp], 0
+    ; jmp      SHORT ini_go
+
+    ; ini_ciclo1:
+    ; mov      ecx, DWORD PTR _i$2[ebp]
+    ; add      ecx, 1
+    ; mov      DWORD PTR _i$2[ebp], ecx
+
+    ; ini_go:
+    ; cmp      DWORD PTR _i$2[ebp], 60  ; 0000003cH
+    ; jge      ini_ciclo2
+    ; imul     edx, DWORD PTR _i$2[ebp], 10
+    ; add      edx, 10		  ; 0000000aH
+    ; mov      DWORD PTR _pos_x$[ebp], edx
+    ; invoke
+    ; jmp      ini_ciclo1
+
+
+
+    ; for (int i = 0; i < scr_height / (cell_height); i++) {
+    ;	  pos_y.y = cell_height + cell_height * i;
+    ;	  SDL_BlitSurface(liney, &(liney->clip_rect), screen, &pos_y);
+    ; }
+
+    ; ini_ciclo2:
+    ; mov      DWORD PTR _i$1[ebp], 0
+    ; jmp      ini_siempre
+    
+    ; ini_siempre:
+    ; cmp      DWORD PTR _i$1[ebp], 60  ; 0000003cH
+    ; jge      ini_ciclo2
+    ; imul     ecx, DWORD PTR _i$1[ebp], 10
+    ; add      ecx, 10		  ; 0000000aH
+    ; mov      DWORD PTR _pos_y$[ebp], ecx
+    ; mov      eax, DWORD PTR _i$1[ebp]
+    ; add      eax, 1
+    ; mov      DWORD PTR _i$1[ebp], eax
+
+    ret
 endp
 
 
 proc blit_board, bcell, screen
-     ; refresca la cuadricula del tablero
+    ; refresca la cuadricula del tablero
 
-     ret
+    ret
 endp
 
 
 proc num_neighbours, x, y
-     ; calcula el nro de vecinos de una celda
+    ; calcula el nro de vecinos de una celda
 
-     ret
+    ret
 endp
 
 
 proc update_board
-     ret
+    ret
 endp
 
 
 proc clear_board, screen, color
-     ; borra las dos matrices (recorre la matriz y pone todas sus celdas en OFF)
-     ; devuelve pantalla en blanco
+    ; borra las dos matrices (recorre la matriz y pone todas sus celdas en OFF)
+    ; devuelve pantalla en blanco
 
-     cinvoke SDL_FillRect,  [screen], [screen], [color]
-     ret
+    cinvoke SDL_FillRect,  [screen], [screen], [color]
+    ret
 endp
 
 
 proc clear_cell, screen, x, y, color
-     ; apaga una celda (la pinta de blanco)
+    ; apaga una celda (la pinta de blanco)
 
-     ret
+    ret
 endp
 
 
 proc initialize_cells_array
-     ; Inicializa el arreglo SDL_Rect para almacenar las celdas
+    ; Inicializa el arreglo SDL_Rect para almacenar las celdas
 
-     ret
+    ret
 endp
 
 
