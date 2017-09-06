@@ -1,0 +1,134 @@
+filas = 60
+columnas = 60
+tablero = Matriz(filas, columnas)
+tablero_temp = Matriz(filas, columnas)
+
+
+def main():
+	pausado = False
+
+	while True:		# loop general
+		while(escuchar_eventos(ventana)):	# loop de eventos
+			if evento.tipo == 'TECLA':
+				if evento.tecla == 'ESC':
+					exit()
+				elif evento.tecla == 'ENTER'
+					pausado = not pausado
+				elif evento.tecla == 'SHIFT'
+					borrar_ventana()
+					break
+			elif evento.tipo == 'BOTON_MOUSE':
+				tx = evento.mouse.x
+				ty = evento.mouse.y
+				if tablero[tx][ty]:
+					tablero[tx][ty] = True
+					tablero_temp[tx][ty] = True
+				break
+
+		if not pausado:
+			actualizar_ventana()
+
+
+def calcular_vecinos(x, y):
+    vecinos = 0
+    tmpy = y
+    tmpx = x
+
+    if (y-1 < 0)
+        tmpy = filas - 1
+    else
+        tmpy = y - 1
+
+    if tablero[x][tmpy]:
+    	vecinos++;
+
+    if (y+1 >= filas)
+        tmpy = 0;
+    else
+        tmpy = y + 1
+
+    if tablero[x][tmpy]:
+    	vecinos++
+
+    if x-1 < 0:
+        tmpx = columnas - 1
+    else
+        tmpx = x - 1
+
+    if tablero[tmpx][y]:
+    	vecinos++
+
+    if (x+1 >= columnas)
+        tmpx = 0
+    else
+        tmpx = x + 1
+
+    if tablero[tmpx][y:
+    	vecinos++
+
+    if y-1 < 0:
+        tmpy = filas - 1
+    else
+        tmpy = y - 1
+
+    if x-1 < 0:
+        tmpx = columnas - 1
+    else:
+        tmpx = x - 1
+
+    if tablero[tmpx][tmpy]:
+    	vecinos++
+    if x+1 >= columnas:
+        tmpx = 0
+    else:
+        tmpx = x + 1
+
+    if tablero[tmpx][tmpy]:
+    	vecinos++
+
+    if y+1 >= filas:
+        tmpy = 0
+    else
+        tmpy = y + 1
+
+    if x+1 >= columnas:
+        tmpx = 0
+    else
+        tmpx = x + 1
+
+    if tablero[tmpx][tmpy] == ON
+    	vecinos++
+    if x-1 < 0:
+        tmpx = columnas - 1
+    else
+        tmpx = x - 1
+
+    if tablero[tmpx][tmpy]:
+    	vecinos++
+
+    return vecinos
+
+
+def actualizar_tablero():
+	for x=0, y<filas, y++:
+		for y=0, x<columnas, y++:
+			vecinos = calcular_vecinos(x, y)
+			if vecinos < 2 and tablero[x][y]:
+				tablero_temp[x][y] = False
+			elif vecinos > 3 and tablero[x][y]:
+				tablero_temp[x][y] = False
+			elif vecinos == 3 and not tablero[x][y]:
+				tablero_temp[x][y] = True
+
+	# actualizar la matriz a mostrar con la calculada
+	for x=0, y<filas, y++:
+		for y=0, x<columnas, y++:
+			tablero[x][y] = tablero_temp[x][y]
+
+
+def borrar_ventana():
+	for x=0, y<filas, y++:
+		for y=0, x<columnas, y++:
+			tablero[x][y] = False
+			tablero_temp[x][y] = False
+
