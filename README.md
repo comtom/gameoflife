@@ -1,27 +1,10 @@
-# juegodelavida
-Trabajo practico Arquitectura I
+# Game of Life
+Conway's game of life automata made in x86 assembly
+
+https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
 
-## OBJETIVO
-Implementar en lenguaje Assembler el juego de la vida, el automata celular, ejecutando en continuo y modificando el tablero.
+## Description
+The program runs in a window, where the board is drawed and it's updated in real time, by calculating the next generating and updating the board.
+You can add or delete cells by clicking with the mouse. You can pause the simulation by presion space key. Press Esc to quit or close the window.
 
-
-## REQUISITOS DE APROBACIÓN 
-* Entregar en la fecha indicada por la cátedra el código fuente y los archivos ejecutables del programa (en un medio digital).
-* Realizar una carpeta de sistema con el pseudocódigo y o diagramas del programa.
-* Sobrepasar el testeo realizado por la cátedra.
-* Aprobar un coloquio referido al desarrollo del programa.
-
-
-## DESCRIPCION DEL FUNCIONAMIENTO
-El sistema funciona en una ventana gráfica donde deberá graficar la evolución del autómata celular calculando una generacion y refrescando la pantalla.
-El mouse podrá dibujar o borrar puntos. El calculo de la generación siguiente se realizara sobre el dibujo en pantalla para que esto sea posible.
-
-Informacion del Juego de la vida
-
-https://es.wikipedia.org/wiki/Juego_de_la_vida
-
-
---------------------
-### Ejemplo de uso de SDL desde asm
-https://drive.google.com/drive/folders/0B8Ux34-slH6mamwxVmEtTFczR2M
